@@ -15,13 +15,4 @@ public:
         return dp[0][0];
     }
 
-    int f(vector<int>nums,int ind,int prev_ind,int n,vector<vector<int>>dp){
-        if(ind == n) return 0;
-        if(dp[ind][prev_ind+1]!= -1) return dp[ind][prev_ind+1];
-        int len = 0+f(nums,ind+1,prev_ind,n,dp);
-        if(prev_ind ==-1|| nums[ind]>nums[prev_ind]){
-            len =max(len, 1 + f(nums,ind+1,ind,n,dp));
-        }
-        return dp[ind][prev_ind+1] = len;
-    }
 };
