@@ -1,58 +1,70 @@
 class Solution {
-public:
-    void dfs(string word, string beginWord, unordered_map<string, int>& mpp, vector<string>& seq,
-        vector<vector<string>>& ans){
-            if (word == beginWord){
-                reverse(seq.begin(), seq.end());
-                ans.push_back(seq);
-                reverse(seq.begin(), seq.end());
-                return;
-            }
-            int val = mpp[word];
-            for (int i = 0; i < word.size(); i++){
-                char original = word[i];
-                for (char ch = 'a'; ch <= 'z'; ch++){
-                    word[i] = ch;
-                    if (mpp.find(word) != mpp.end() && mpp[word] == val-1){
-                        seq.push_back(word);
-                        dfs(word, beginWord, mpp, seq, ans);
-                        seq.pop_back();
-                    }
+    unordered_map<string,int>mpp;
+    vector<vector<string>>ans;
+    string b;
+
+private:
+    void dfs(string word, vector<string>&seq){
+        if(word==b){
+            reverse(seq.begin(),seq.end());
+            ans.push_back(seq);
+            reverse(seq.begin(),seq.end());
+            return;
+        }
+
+        int steps = mpp[word];
+        int sizee = word.size();
+
+        for(int i = 0;i<sizee;i++){
+            char original = word[i];
+            for(char c = 'a'; c<= 'z';c++){
+                word[i] = c;
+                if(mpp.find(word)!=mpp.end() && mpp[word]+1==steps){
+                    seq.push_back(word);
+                    dfs(word,seq);
+                    seq.pop_back();
                 }
-                word[i] = original;
             }
+            word[i]  = original;
+        }
     }
+
+public:
     vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
-        unordered_set<string> words;
-        for (auto& it : wordList) words.insert(it);
-        vector<vector<string>> ans;
-        if (!words.count(endWord)) return ans;
-        words.erase(beginWord);
-        queue<string> q;
-        unordered_map<string, int> mpp;
-        int steps = 1;
-        q.push({beginWord});
-        mpp[beginWord] = 1;
-        while (!q.empty()){
+        unordered_set<string>st(wordList.begin(),wordList.end());
+        queue<string>q;
+        b=beginWord;
+        q.push(beginWord);
+        mpp[beginWord]=1;
+        int sizee = beginWord.size();
+        st.erase(beginWord);
+
+        while(!q.empty()){
             string word = q.front();
+            int steps = mpp[word];
             q.pop();
-            steps = mpp[word];
-            for (int i = 0; i < word.size(); i++){
+
+            if(word==endWord) break;
+
+            for(int i=0;i<sizee;i++){
                 char original = word[i];
-                for (char ch = 'a'; ch <= 'z'; ch++){
-                    word[i] = ch;
-                    if (words.count(word)){
-                        mpp[word] = steps+1;
+                for(char c = 'a';c<='z';c++){
+                    word[i] = c;
+                    if(st.count(word)){
+                        mpp[word] = steps + 1;
                         q.push(word);
-                        words.erase(word);
+                        st.erase(word);
                     }
                 }
                 word[i] = original;
             }
         }
-        if (mpp.find(endWord) == mpp.end()) return ans;
-        vector<string> seq = {endWord};
-        dfs(endWord, beginWord, mpp, seq, ans);
+
+        if(mpp.find(endWord)!=mpp.end()){
+            vector<string>seq;
+            seq.push_back(endWord);
+            dfs(endWord,seq);
+        }
         return ans;
     }
-}; // BFS+DFS Approach :: T.C = O(N*M*26) & S.C = O(N^2*M)
+};
