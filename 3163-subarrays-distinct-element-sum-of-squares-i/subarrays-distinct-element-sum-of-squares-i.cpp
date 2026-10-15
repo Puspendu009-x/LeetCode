@@ -1,12 +1,13 @@
 class Solution {
 public:
     int sumCounts(vector<int>& nums) {
-        int n = nums.size(), total = 0;
+        int n = nums.size();
+        long long total = 0;
         for (int i = 0; i < n; i++) {
-            bitset<101> seen;
+            unordered_set<int>seen;
             for (int j = i; j < n; j++) {
-                seen.set(nums[j]); 
-                int d = seen.count();
+                seen.insert(nums[j]); 
+                int d = seen.size();
                 total += d * d;
             }
         }
