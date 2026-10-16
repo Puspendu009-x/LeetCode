@@ -3,8 +3,7 @@ public:
     int maxArea(vector<int>& height) {
         if (height.size() < 2) return 0;
         int maxArea=0;
-        int l=0;
-        int r=height.size()-1;
+        int l=0, r=height.size()-1;
 
         while(l<r){
             int currArea = min(height[l],height[r])*(r-l);
