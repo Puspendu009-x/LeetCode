@@ -5,8 +5,9 @@ public:
         if(n==1) return 0;
         int sum=0;
         sort(nums.begin(),nums.end());
+        int med=nums[n/2];
         for(int i=0;i<n;i++){
-            sum+=abs(nums[i]-nums[n/2]);
+            sum+=abs(nums[i]-med);
         }
         return sum;
     }
